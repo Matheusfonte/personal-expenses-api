@@ -1,0 +1,21 @@
+{
+  "name": "personal-expenses-api",
+  "version": "1.0.0",
+  "description": "API REST para gerenciamento de despesas pessoais",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "node --watch src/app.js"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "api",
+    "despesas"
+  ],
+  "author": "Matheus",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
