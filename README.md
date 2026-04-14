@@ -11,8 +11,6 @@ A aplicação permite:
 - buscar despesa por ID
 - atualizar despesa
 - remover despesa
-- calcular o total de despesas
-- calcular o total por categoria
 
 A API não utiliza banco de dados. Os dados são armazenados em arquivo JSON, conforme solicitado na atividade.
 
@@ -32,15 +30,13 @@ A API não utiliza banco de dados. Os dados são armazenados em arquivo JSON, co
 personal-expenses-api
 │
 ├── src
-│   ├── models
-│   │   └── expense.js
-│   │
 │   ├── data
 │   │   └── expenses.json
 │   │
 │   └── app.js
 │
 ├── package.json
+├── package-lock.json
 └── README.md
 ```
 
@@ -50,61 +46,84 @@ personal-expenses-api
 
 ### Entidade: Expense
 
-| Campo        | Tipo   | Descrição             |
-|-------------|--------|-----------------------|
-| id          | string | Identificador único   |
-| title       | string | Nome da despesa       |
-| amount      | number | Valor da despesa      |
-| category    | string | Categoria da despesa  |
-| date        | date   | Data da despesa       |
-| description | string | Descrição opcional    |
-| createdAt   | date   | Data de criação       |
+| Campo     | Tipo   | Descrição           |
+|-----------|--------|---------------------|
+| id        | number | Identificador único |
+| title     | string | Nome da despesa     |
+| amount    | number | Valor da despesa    |
+| createdAt | string | Data de criação     |
 
 ---
 
-## MER (Modelo Entidade Relacionamento)
+## Rotas da API
 
-```text
-+------------------+
-|     EXPENSE      |
-+------------------+
-| id (PK)          |
-| title            |
-| amount           |
-| category         |
-| date             |
-| description      |
-| createdAt        |
-+------------------+
+### Rota inicial
+
+**GET /**
+
+Retorna uma mensagem informando que a API está funcionando.
+
+### Criar despesa
+
+**POST /expenses**
+
+Exemplo de corpo da requisição:
+
+```json
+{
+  "title": "Internet",
+  "amount": 99.90
+}
 ```
 
----
+### Listar despesas
 
-## Regras de negócio
+**GET /expenses**
 
-- O campo `title` é obrigatório
-- O campo `amount` deve ser maior que zero
-- O campo `date` não pode ser no futuro
-- O `id` é gerado automaticamente
-- Caso a despesa não exista, a API retorna `404`
+Retorna todas as despesas cadastradas.
+
+### Buscar despesa por ID
+
+**GET /expenses/:id**
+
+Retorna uma despesa específica pelo ID.
+
+### Atualizar despesa
+
+**PUT /expenses/:id**
+
+Exemplo de corpo da requisição:
+
+```json
+{
+  "title": "Energia",
+  "amount": 150
+}
+```
+
+### Remover despesa
+
+**DELETE /expenses/:id**
+
+Remove uma despesa pelo ID.
 
 ---
 
 ## Como executar o projeto
 
-### 1. Instalar as dependências
+1. Instale as dependências:
 
 ```bash
 npm install
 ```
 
-### 2. Iniciar o servidor
+2. Inicie a aplicação:
 
 ```bash
 npm start
 ```
 
-Servidor rodando em:
+3. A API estará disponível em:
 
 ```bash
 http://localhost:3000
@@ -112,140 +131,6 @@ http://localhost:3000
 
 ---
 
-## Rotas da API
+## Observação
 
-| Método | Rota                       | Descrição                     |
-|--------|----------------------------|-------------------------------|
-| GET    | /                          | Mensagem inicial da API       |
-| POST   | /expenses                  | Cria uma nova despesa         |
-| GET    | /expenses                  | Lista todas as despesas       |
-| GET    | /expenses/:id              | Busca uma despesa por ID      |
-| PUT    | /expenses/:id              | Atualiza uma despesa          |
-| DELETE | /expenses/:id              | Remove uma despesa            |
-| GET    | /expenses/summary/total    | Retorna o total de despesas   |
-| GET    | /expenses/summary/category | Retorna o total por categoria |
-
----
-
-## Exemplos de requisições
-
-### Criar despesa
-
-**POST** `/expenses`
-
-```json
-{
-  "title": "Supermercado",
-  "amount": 150.50,
-  "category": "Alimentação",
-  "date": "2026-03-10",
-  "description": "Compra semanal"
-}
-```
-
-### Listar despesas
-
-**GET** `/expenses`
-
-### Filtrar por categoria
-
-**GET** `/expenses?category=Alimentação`
-
-### Filtrar por data
-
-**GET** `/expenses?date=2026-03-10`
-
-### Buscar por ID
-
-**GET** `/expenses/desp_123`
-
-### Atualizar despesa
-
-**PUT** `/expenses/desp_123`
-
-```json
-{
-  "title": "Supermercado",
-  "amount": 200
-}
-```
-
-### Remover despesa
-
-**DELETE** `/expenses/desp_123`
-
-### Total de despesas
-
-**GET** `/expenses/summary/total`
-
-Resposta:
-
-```json
-{
-  "total": 2450.9
-}
-```
-
-### Total por categoria
-
-**GET** `/expenses/summary/category`
-
-Resposta:
-
-```json
-{
-  "Alimentação": 800,
-  "Transporte": 200,
-  "Lazer": 350
-}
-```
-
----
-
-## Exemplo de resposta de sucesso
-
-```json
-{
-  "id": "desp_123",
-  "title": "Supermercado",
-  "amount": 150.50,
-  "category": "Alimentação",
-  "date": "2026-03-10",
-  "description": "Compra semanal",
-  "createdAt": "2026-03-11T12:00:00.000Z"
-}
-```
-
----
-
-## Exemplo de resposta de erro
-
-```json
-{
-  "error": "Despesa não encontrada"
-}
-```
-
----
-
-## Testes no Postman ou curl
-
-A API pode ser testada com:
-
-- Postman
-- Insomnia
-- curl
-
-Exemplo com curl:
-
-```bash
-curl -X POST http://localhost:3000/expenses \
--H "Content-Type: application/json" \
--d '{
-  "title": "Supermercado",
-  "amount": 150.50,
-  "category": "Alimentação",
-  "date": "2026-03-10",
-  "description": "Compra semanal"
-}'
-```
+O arquivo `expenses.json` é usado para armazenar as despesas da aplicação.
