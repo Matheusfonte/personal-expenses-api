@@ -2,43 +2,39 @@
 
 ## Descrição do projeto
 
-Este projeto é uma API REST desenvolvida em Node.js para gerenciamento de despesas pessoais.
+Este projeto consiste no desenvolvimento de uma API REST utilizando Node.js e Express, com o objetivo de gerenciar despesas pessoais.
 
-A aplicação permite:
+A aplicação permite realizar operações básicas como:
 
 - cadastrar despesas
 - listar despesas
 - buscar despesa por ID
 - atualizar despesa
 - remover despesa
+- calcular o total de despesas
+- calcular o total por categoria
 
-A API não utiliza banco de dados. Os dados são armazenados em arquivo JSON, conforme solicitado na atividade.
+A aplicação não utiliza banco de dados. Os dados são armazenados em memória, utilizando um array.
 
 ---
 
-## Tecnologias usadas
+## Tecnologias utilizadas
 
 - Node.js
 - Express.js
-- JSON para persistência de dados
 
 ---
 
 ## Estrutura do projeto
 
-```bash
 personal-expenses-api
 │
 ├── src
-│   ├── data
-│   │   └── expenses.json
-│   │
 │   └── app.js
 │
 ├── package.json
 ├── package-lock.json
 └── README.md
-```
 
 ---
 
@@ -46,91 +42,103 @@ personal-expenses-api
 
 ### Entidade: Expense
 
-| Campo     | Tipo   | Descrição           |
-|-----------|--------|---------------------|
-| id        | number | Identificador único |
-| title     | string | Nome da despesa     |
-| amount    | number | Valor da despesa    |
-| createdAt | string | Data de criação     |
+| Campo        | Tipo   | Descrição                     |
+|-------------|--------|-------------------------------|
+| id          | number | Identificador único           |
+| title       | string | Nome da despesa               |
+| amount      | number | Valor da despesa              |
+| category    | string | Categoria da despesa          |
+| date        | string | Data da despesa               |
+| description | string | Descrição opcional            |
+| createdAt   | string | Data de criação               |
 
 ---
 
 ## Rotas da API
 
-### Rota inicial
+| Método | Rota                        | Descrição                          |
+|--------|-----------------------------|------------------------------------|
+| GET    | /                           | Verifica se a API está funcionando |
+| POST   | /expenses                   | Cria uma nova despesa              |
+| GET    | /expenses                   | Lista todas as despesas            |
+| GET    | /expenses/:id               | Busca uma despesa por ID           |
+| PUT    | /expenses/:id               | Atualiza uma despesa               |
+| DELETE | /expenses/:id               | Remove uma despesa                 |
+| GET    | /expenses/summary/total     | Retorna o total das despesas       |
+| GET    | /expenses/summary/category  | Retorna o total por categoria      |
 
-**GET /**
+---
 
-Retorna uma mensagem informando que a API está funcionando.
+## Exemplos de requisição
 
 ### Criar despesa
 
-**POST /expenses**
+POST /expenses
 
-Exemplo de corpo da requisição:
-
-```json
 {
   "title": "Internet",
-  "amount": 99.90
+  "amount": 99.90,
+  "category": "Casa",
+  "date": "2026-04-14",
+  "description": "Conta mensal da internet"
 }
-```
 
-### Listar despesas
-
-**GET /expenses**
-
-Retorna todas as despesas cadastradas.
-
-### Buscar despesa por ID
-
-**GET /expenses/:id**
-
-Retorna uma despesa específica pelo ID.
+---
 
 ### Atualizar despesa
 
-**PUT /expenses/:id**
+PUT /expenses/:id
 
-Exemplo de corpo da requisição:
-
-```json
 {
   "title": "Energia",
-  "amount": 150
+  "amount": 150,
+  "category": "Casa",
+  "date": "2026-04-14",
+  "description": "Conta de luz"
 }
-```
 
-### Remover despesa
+---
 
-**DELETE /expenses/:id**
+### Total de despesas
 
-Remove uma despesa pelo ID.
+GET /expenses/summary/total
+
+{
+  "total": 249.9
+}
+
+---
+
+### Total por categoria
+
+GET /expenses/summary/category
+
+{
+  "Casa": 249.9,
+  "Transporte": 80
+}
+
+---
+
+## Regras de negócio
+
+- O campo title é obrigatório
+- O campo amount deve ser maior que zero
+- Os campos category e date são obrigatórios
+- A data não pode ser no futuro
+- O ID é gerado automaticamente
+- Caso a despesa não seja encontrada, a API retorna erro 404
 
 ---
 
 ## Como executar o projeto
 
-1. Instale as dependências:
-
-```bash
-npm install
-```
-
-2. Inicie a aplicação:
-
-```bash
-npm start
-```
-
-3. A API estará disponível em:
-
-```bash
-http://localhost:3000
-```
+1. npm install
+2. npm start
+3. http://localhost:3000
 
 ---
 
-## Observação
+## Autor
 
-O arquivo `expenses.json` é usado para armazenar as despesas da aplicação.
+Matheus
