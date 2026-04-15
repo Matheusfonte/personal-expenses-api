@@ -30,7 +30,11 @@ A aplicação não utiliza banco de dados. Os dados são armazenados em memória
 personal-expenses-api
 │
 ├── src
-│   └── app.js
+│   ├── app.js
+│   ├── data
+│   │   └── expenses.json
+│   └── models
+│       └── expense.js
 │
 ├── package.json
 ├── package-lock.json
